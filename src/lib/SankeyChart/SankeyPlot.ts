@@ -53,6 +53,8 @@ export class SankeyPlot {
   private linear_gradient_colors_object: Record<string, Record<string, boolean>>;
   private links_to_create_indexes: number[] | null = null;;
 
+  private readonly BORDER_PADDING = 10;
+
   constructor(
     dom_container: HTMLElement,
     nodes_data: any[],
@@ -160,6 +162,14 @@ export class SankeyPlot {
     this.createLinks();
   }
 
+
+  public getPlotWidth(): number {
+    return this.plot_width;
+  }
+
+  public getPlotHeight(): number {
+    return this.plot_height;
+  }
 
   private createDomNode(): void {
     this.dom_node = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -432,7 +442,7 @@ export class SankeyPlot {
     );
 
     for (let column_index = this.first_column; column_index < this.last_column; column_index++) {
-      this.nodes[column_index] = this.nodes[column_index] || {}; // Ensure this.nodes[column_index] exists
+      this.nodes[column_index] = this.nodes[column_index] || {};
       for (let node_index = 0; node_index < this.nodes_data_structure[column_index].length; node_index++) {
         let node = this.nodes_data_structure[column_index][node_index];
         let label = node['properties_object'].hasOwnProperty('label') ? node['properties_object']['label'] : "";
@@ -447,12 +457,19 @@ export class SankeyPlot {
           this.column_width * parseFloat(node['properties_object']['width']) :
           this.column_width * this.nodes_width_percent;
 
-        this.nodes[column_index][node_index] = new SankeyNode(
+        let x = Math.max(this.BORDER_PADDING, Math.min(
           (column_index - this.first_column) * this.column_width + (this.column_width - width) / 2 +
           node['horizontal_shift'] * (this.column_width / this.last_column_width),
+          this.plot_width - width - this.BORDER_PADDING
+        ));
+
+        let y = Math.max(this.BORDER_PADDING, Math.min(
           node['y'] + node['vertical_shift'],
-          width,
-          node['height'],
+          this.plot_height - node['height'] - this.BORDER_PADDING
+        ));
+
+        this.nodes[column_index][node_index] = new SankeyNode(
+          x, y, width, node['height'],
           this,
           column_index,
           node_index,
@@ -466,7 +483,7 @@ export class SankeyPlot {
     for (let i in out_of_column_range_nodes) {
       let column = out_of_column_range_nodes[i]['column'];
       let position = out_of_column_range_nodes[i]['position'];
-      this.nodes[column] = this.nodes[column] || {}; // Ensure this.nodes[column] exists
+      this.nodes[column] = this.nodes[column] || {};
       let node = this.nodes_data_structure[column][position];
       let label = node['properties_object'].hasOwnProperty('label') ? node['properties_object']['label'] : "";
       let color = this.default_nodes_color;
@@ -480,12 +497,19 @@ export class SankeyPlot {
         this.column_width * parseFloat(node['properties_object']['width']) :
         this.column_width * this.nodes_width_percent;
 
-      this.nodes[column][position] = new SankeyNode(
+      let x = Math.max(this.BORDER_PADDING, Math.min(
         (column - this.first_column) * this.column_width + (this.column_width - width) / 2 +
         node['horizontal_shift'] * (this.column_width / this.last_column_width),
+        this.plot_width - width - this.BORDER_PADDING
+      ));
+
+      let y = Math.max(this.BORDER_PADDING, Math.min(
         node['y'] + node['vertical_shift'],
-        width,
-        node['height'],
+        this.plot_height - node['height'] - this.BORDER_PADDING
+      ));
+
+      this.nodes[column][position] = new SankeyNode(
+        x, y, width, node['height'],
         this,
         column,
         position,

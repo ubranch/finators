@@ -72,7 +72,7 @@ export function SankeyChart() {
         containerRef.current,
         nodes_data,
         links_data,
-        800,  // plot width
+        900,  // plot width
         400,   // plot height
         0,     // first column
         5,     // last column

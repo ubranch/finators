@@ -78,7 +78,6 @@ export class PlotCreator {
     this.calculateNodeHeightUnit();
     this.last_column_width = this.plot_width / (this.last_column - this.first_column);
     this.sankey_plot = this.setNewPlot();
-
     this.applyStyles();
   }
 

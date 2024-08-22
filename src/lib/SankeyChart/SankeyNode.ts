@@ -68,13 +68,21 @@ export class SankeyNode {
   }
 
   public move(new_x: number, new_y: number): void {
+    const BORDER_PADDING = this.sankey_plot_object.BORDER_PADDING;
+
     if (this.sankey_plot_object.node_move_x) {
-      let new_x_pos = new_x - this.width / 2 + this.sankey_plot_object.dom_node.parentNode.scrollLeft;
+      let new_x_pos = Math.max(BORDER_PADDING, Math.min(
+        new_x - this.width / 2 + this.sankey_plot_object.dom_node.parentNode.scrollLeft,
+        this.sankey_plot_object.plot_width - this.width - BORDER_PADDING
+      ));
       this.sankey_plot_object.nodes_data_structure[this.column][this.position]['horizontal_shift'] += new_x_pos - this.current_x;
       this.current_x = new_x_pos;
     }
     if (this.sankey_plot_object.node_move_y) {
-      let new_y_pos = new_y - this.height / 2 + this.sankey_plot_object.dom_node.parentNode.scrollTop;
+      let new_y_pos = Math.max(BORDER_PADDING, Math.min(
+        new_y - this.height / 2 + this.sankey_plot_object.dom_node.parentNode.scrollTop,
+        this.sankey_plot_object.plot_height - this.height - BORDER_PADDING
+      ));
       this.sankey_plot_object.nodes_data_structure[this.column][this.position]['vertical_shift'] += new_y_pos - this.current_y;
       this.current_y = new_y_pos;
     }
