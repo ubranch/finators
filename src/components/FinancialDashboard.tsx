@@ -27,7 +27,7 @@ export function FinancialDashboard() {
       </div>
       {isGraphicView ? (
         <>
-          <SankeyChart amountFormat={amountFormat} />
+          <SankeyChart amountFormat={amountFormat} costType='' />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <RevenueBarChart amountFormat={amountFormat} />
             <OperatingExpensesPieChart amountFormat={amountFormat} />
