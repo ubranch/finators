@@ -1,4 +1,3 @@
-// src/components/FinancialSummaryTable.tsx
 import {
   Table,
   TableBody,
@@ -9,8 +8,10 @@ import {
 } from "@/components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { financialData } from "@/lib/data/financialData"
+import { useState } from "react"
 import { formatAmount } from "@/lib/utils"
-import { useState } from 'react'
+import { ChevronDownIcon } from "@radix-ui/react-icons"
+import { cn } from "@/lib/utils"
 
 export function FinancialSummaryTable({ amountFormat }: { amountFormat: string }) {  const formatNumber = (num: string) =>
     new Intl.NumberFormat("en-US").format(Number(num))
@@ -94,20 +95,34 @@ export function FinancialSummaryTable({ amountFormat }: { amountFormat: string }
               </TableCell>
               <TableCell className="text-right">{financialData.GrossProfit.Ratio}</TableCell>
             </TableRow>
-            {/* Operating Expenses */}
+                        {/* Operating Expenses */}
             <TableRow>
               <TableCell
                 colSpan={2}
-                className="cursor-pointer"
-                onClick={() => setShowOperatingExpenses(!showOperatingExpenses)}
+                className="cursor-pointer flex items-center justify-between"
+                onClick={() =>
+                  setShowOperatingExpenses(!showOperatingExpenses)
+                }
               >
                 Operating Expenses
+                <ChevronDownIcon
+                  className={cn(
+                    "h-4 w-4 transition-transform duration-200",
+                    showOperatingExpenses ? "rotate-180" : ""
+                  )}
+                />
               </TableCell>
               <TableCell className="text-right">
-                {formatAmount(financialData.OperatingExpenses.Total.Amount, amountFormat)}
+                {formatAmount(
+                  financialData.OperatingExpenses.Total.Amount,
+                  amountFormat
+                )}
               </TableCell>
               <TableCell className="text-right">
-                {formatAmount(financialData.OperatingExpenses.Total.Amount, amountFormat)}
+                {formatAmount(
+                  financialData.OperatingExpenses.Total.Amount,
+                  amountFormat
+                )}
               </TableCell>
               <TableCell className="text-right">
                 {financialData.OperatingExpenses.Total.Ratio}
