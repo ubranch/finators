@@ -1,7 +1,7 @@
 // src/components/RevenueBarChart.tsx
 "use client"
 
-import { Bar, BarChart, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, XAxis, YAxis, Legend, ResponsiveContainer } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { financialData } from "@/lib/data/financialData"
@@ -47,23 +47,29 @@ export function RevenueBarChart() {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart data={chartData}>
-            <XAxis dataKey="name" />
-            <YAxis tickFormatter={formatYAxis} />
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  formatter={(value) => (
-                    <div className="flex justify-between items-center gap-2">
-                      <span className="font-medium">{formatTooltipValue(value as number)}</span>
-                    </div>
-                  )}
-                />
-              }
-            />
-            <Bar dataKey="Payment" fill="var(--color-Payment)" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="Paid" fill="var(--color-Paid)" radius={[4, 4, 0, 0]} />
-          </BarChart>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={chartData}>
+              <XAxis dataKey="name" />
+              <YAxis tickFormatter={formatYAxis} />
+              <Legend />
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    formatter={(value, name) => (
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-medium" style={{ color: chartConfig[name as keyof typeof chartConfig].color }}>
+                          {chartConfig[name as keyof typeof chartConfig].label}:
+                        </span>
+                        <span>{formatTooltipValue(value as number)}</span>
+                      </div>
+                    )}
+                  />
+                }
+              />
+              <Bar dataKey="Payment" fill={chartConfig.Payment.color} radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Paid" fill={chartConfig.Paid.color} radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
     </Card>
