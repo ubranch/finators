@@ -56,8 +56,7 @@ export class PlotCreator {
     last_column: number,
     settings: Settings = {}
   ) {
-    this.dom_container = document.createElement('div');
-    dom_container.appendChild(this.dom_container);
+    this.dom_container = dom_container;
     this.dom_container.setAttribute('id', 'sankey_plot_auto_container');
     this.dom_container.style.overflow = 'auto';
     this.dom_container.classList.add('noselect');
@@ -357,6 +356,7 @@ export class PlotCreator {
 
   private setNewPlot(): SankeyPlot {
     this.dom_container.replaceChildren();
+
     return new SankeyPlot(
       this.dom_container,
       this.nodes_data_structure,
