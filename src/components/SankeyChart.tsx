@@ -15,10 +15,9 @@ import { formatAmount } from "@/lib/utils"
 
 interface SankeyChartProps {
   amountFormat: string
-  costType: string
 }
 
-export function SankeyChart({ amountFormat, costType }: SankeyChartProps) {
+export function SankeyChart({ amountFormat }: SankeyChartProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -60,7 +59,7 @@ export function SankeyChart({ amountFormat, costType }: SankeyChartProps) {
         1000,
         400,
         0,
-        nodes_data.length - 1,
+        5,
         {
           show_column_lines: false,
           show_column_names: false,
@@ -89,7 +88,7 @@ export function SankeyChart({ amountFormat, costType }: SankeyChartProps) {
         }
       )
     }
-  }, [amountFormat, costType])
+  }, [amountFormat])
 
   return (
       <Card>
