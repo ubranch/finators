@@ -1,12 +1,24 @@
 // src/components/SankeyChart.tsx
 "use client"
 
-import { useEffect, useRef } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { PlotCreator } from '@/lib/SankeyChart/PlotCreator'
-import { financialData } from '@/lib/data/financialData'
+import { useEffect, useRef } from "react"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { PlotCreator } from "@/lib/SankeyChart/PlotCreator"
+import { financialData } from "@/lib/data/financialData"
+import { formatAmount } from "@/lib/utils"
 
-export function SankeyChart() {
+interface SankeyChartProps {
+  amountFormat: string
+  costType: string
+}
+
+export function SankeyChart({ amountFormat, costType }: SankeyChartProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -45,10 +57,10 @@ export function SankeyChart() {
         containerRef.current,
         nodes_data,
         links_data,
-        1000,  // plot width
-        400,   // plot height
-        0,     // first column
-        5,     // last column
+        1000,
+        400,
+        0,
+        nodes_data.length - 1,
         {
           show_column_lines: false,
           show_column_names: false,
@@ -63,26 +75,31 @@ export function SankeyChart() {
           hover_link_cursor: 'crosshair',
           on_node_hover_function: (node_info) => `
             <strong>${node_info.label}</strong><br>
-            Value: ${Number(node_info.height).toLocaleString('en-US', {maximumFractionDigits:0})} UZS
+            Value: ${formatAmount(
+              node_info.height.toString(),
+              amountFormat
+            )} UZS
           `,
           on_link_hover_function: (link_info) => `
-            <strong>${link_info.from_label} → ${link_info.to_label}</strong><br>
-            Value: ${Number(link_info.value).toLocaleString('en-US', {maximumFractionDigits:0})} UZS
+            <strong>${link_info.from_label} → ${
+              link_info.to_label
+            }</strong><br>
+            Value: ${formatAmount(link_info.value.toString(), amountFormat)} UZS
           `,
         }
       )
     }
-  }, [])
+  }, [amountFormat, costType])
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Financial Flow</CardTitle>
-        <CardDescription>Sankey diagram of financial flows</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div ref={containerRef} className="w-full h-[400px]" />
-      </CardContent>
-    </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Financial Flow</CardTitle>
+          <CardDescription>Sankey diagram of financial flows</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div ref={containerRef} className="w-full h-[400px]" />
+        </CardContent>
+      </Card>
   )
 }
