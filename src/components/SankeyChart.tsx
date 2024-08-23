@@ -1,37 +1,10 @@
-'use client'
+// src/components/SankeyChart.tsx
+"use client"
 
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { PlotCreator } from '@/lib/SankeyChart/PlotCreator'
-
-interface FinancialData {
-  Revenue: {
-    Company: string
-    Individual: string
-    Total: string
-  }
-  COGS: string
-  "Gross Profit": string
-  Other: string
-  Payroll: string
-  Tax: string
-  Utility: string
-  "Net profit": string
-}
-
-const data: FinancialData = {
-  "Revenue": {
-    "Company": "121028528",
-    "Individual": "21944555",
-    "Total": "142973083"
-  },
-  "COGS": "61088128",
-  "Gross Profit": "81884955",
-  "Other": "34255229",
-  "Payroll": "25556400",
-  "Tax": "3897672",
-  "Utility": "10127000",
-  "Net profit": "8048654"
-}
+import { financialData } from '@/lib/data/financialData'
 
 export function SankeyChart() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -48,23 +21,23 @@ export function SankeyChart() {
       ]
 
       const links_data = [
-        { from: { column: 0, node: 0 }, to: { column: 1, node: 0 }, value: Number(data.Revenue.Company),
+        { from: { column: 0, node: 0 }, to: { column: 1, node: 0 }, value: Number(financialData.Revenue.Company.Payment),
           color: { start: '#4287f5', end: '#f542e6' } },
-        { from: { column: 0, node: 1 }, to: { column: 1, node: 0 }, value: Number(data.Revenue.Individual),
+        { from: { column: 0, node: 1 }, to: { column: 1, node: 0 }, value: Number(financialData.Revenue.Individual.Payment),
           color: { start: '#41f48e', end: '#f542e6' } },
-        { from: { column: 1, node: 0 }, to: { column: 2, node: 0 }, value: Number(data.COGS),
+        { from: { column: 1, node: 0 }, to: { column: 2, node: 0 }, value: Number(financialData.COGS.Amount),
           color: { start: '#f542e6', end: '#f54242' } },
-        { from: { column: 1, node: 0 }, to: { column: 2, node: 1 }, value: Number(data["Gross Profit"]),
+        { from: { column: 1, node: 0 }, to: { column: 2, node: 1 }, value: Number(financialData.GrossProfit.Payment),
           color: { start: '#f542e6', end: '#42e8f5' } },
-        { from: { column: 2, node: 1 }, to: { column: 3, node: 0 }, value: Number(data.Other),
+        { from: { column: 2, node: 1 }, to: { column: 3, node: 0 }, value: Number(financialData.OperatingExpenses.Other.Amount),
           color: { start: '#42e8f5', end: '#f5a442' } },
-        { from: { column: 2, node: 1 }, to: { column: 3, node: 1 }, value: Number(data.Payroll),
+        { from: { column: 2, node: 1 }, to: { column: 3, node: 1 }, value: Number(financialData.OperatingExpenses.Payroll.Amount),
           color: { start: '#42e8f5', end: '#8e42f5' } },
-        { from: { column: 2, node: 1 }, to: { column: 3, node: 2 }, value: Number(data.Tax),
+        { from: { column: 2, node: 1 }, to: { column: 3, node: 2 }, value: Number(financialData.OperatingExpenses.Tax.Amount),
           color: { start: '#42e8f5', end: '#42f5b9' } },
-        { from: { column: 2, node: 1 }, to: { column: 3, node: 3 }, value: Number(data.Utility),
+        { from: { column: 2, node: 1 }, to: { column: 3, node: 3 }, value: Number(financialData.OperatingExpenses.Utility.Amount),
           color: { start: '#42e8f5', end: '#f542a1' } },
-        { from: { column: 2, node: 1 }, to: { column: 4, node: 0 }, value: Number(data["Net profit"]),
+        { from: { column: 2, node: 1 }, to: { column: 4, node: 0 }, value: Number(financialData.NetProfit.Payment),
           color: { start: '#42e8f5', end: '#42f56f' } },
       ]
 
@@ -72,7 +45,7 @@ export function SankeyChart() {
         containerRef.current,
         nodes_data,
         links_data,
-        900,  // plot width
+        1000,  // plot width
         400,   // plot height
         0,     // first column
         5,     // last column
@@ -90,16 +63,26 @@ export function SankeyChart() {
           hover_link_cursor: 'crosshair',
           on_node_hover_function: (node_info) => `
             <strong>${node_info.label}</strong><br>
-            Value: ${(node_info.height).toLocaleString('en-US', {maximumFractionDigits:0})} UZS
+            Value: ${Number(node_info.height).toLocaleString('en-US', {maximumFractionDigits:0})} UZS
           `,
           on_link_hover_function: (link_info) => `
             <strong>${link_info.from_label} → ${link_info.to_label}</strong><br>
-            Value: ${(link_info.value).toLocaleString('en-US', {maximumFractionDigits:0})} UZS
+            Value: ${Number(link_info.value).toLocaleString('en-US', {maximumFractionDigits:0})} UZS
           `,
         }
       )
     }
   }, [])
 
-  return <div ref={containerRef} className="w-full h-[600px]" />
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Financial Flow</CardTitle>
+        <CardDescription>Sankey diagram of financial flows</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div ref={containerRef} className="w-full h-[400px]" />
+      </CardContent>
+    </Card>
+  )
 }
