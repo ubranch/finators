@@ -5,6 +5,7 @@ import { Bar, BarChart, XAxis, YAxis, Legend, ResponsiveContainer } from "rechar
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { financialData } from "@/lib/data/financialData"
+import { formatAmount } from "@/lib/utils"
 
 const chartData = [
   {
@@ -30,8 +31,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function RevenueBarChart() {
-  const formatYAxis = (tickItem: number) => {
+export function RevenueBarChart({ amountFormat }: { amountFormat: string }) {  const formatYAxis = (tickItem: number) => {
     return new Intl.NumberFormat('en-US', { notation: 'compact', compactDisplay: 'short' }).format(tickItem)
   }
 
@@ -60,7 +60,9 @@ export function RevenueBarChart() {
                         <span className="font-medium" style={{ color: chartConfig[name as keyof typeof chartConfig].color }}>
                           {chartConfig[name as keyof typeof chartConfig].label}:
                         </span>
-                        <span>{formatTooltipValue(value as number)}</span>
+                        <span>
+                          {formatAmount(value.toString(), amountFormat)}
+                        </span>
                       </div>
                     )}
                   />
