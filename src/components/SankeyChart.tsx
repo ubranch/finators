@@ -19,8 +19,14 @@ interface SankeyChartProps {
 
 export function SankeyChart({ amountFormat }: SankeyChartProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const plotCreatorRef = useRef<PlotCreator | null>(null)
 
   useEffect(() => {
+    if (plotCreatorRef.current) {
+      plotCreatorRef.current.removePlot()
+      plotCreatorRef.current = null
+    }
+
     if (containerRef.current) {
       const nodes_data = [
         [{ label: 'Company Revenue', color: '#4287f5' }, { label: 'Individual Revenue', color: '#41f48e' }],
@@ -88,7 +94,13 @@ export function SankeyChart({ amountFormat }: SankeyChartProps) {
         }
       )
     }
-  }, [amountFormat])
+    return () => {
+      if (plotCreatorRef.current) {
+        plotCreatorRef.current.removePlot();
+        plotCreatorRef.current = null;
+      }
+    };
+  }, [amountFormat]);
 
   return (
       <Card>
