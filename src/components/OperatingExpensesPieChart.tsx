@@ -1,7 +1,6 @@
 // src/components/OperatingExpensesPieChart.tsx
-"use client"
 
-import { Pie, PieChart, Cell, Legend, ResponsiveContainer, Label } from "recharts"
+import { Pie, PieChart, Cell, Legend, ResponsiveContainer } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { financialData } from "@/lib/data/financialData"
@@ -36,14 +35,14 @@ const chartConfig = {
 
 export function OperatingExpensesPieChart() {
   const formatTooltipValue = (value: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'UZS' }).format(value)
   }
 
   const totalValue = chartData.reduce((sum, item) => sum + item.value, 0)
 
   const renderCustomizedLabel = (props: any) => {
-    const { cx, cy, midAngle, innerRadius, outerRadius, percent } = props;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const { cx, cy, midAngle, innerRadius, outerRadius, percent, index } = props;
+    const radius = innerRadius + (outerRadius - innerRadius) * 1.4;
     const x = cx + radius * Math.cos(-midAngle * Math.PI / 180);
     const y = cy + radius * Math.sin(-midAngle * Math.PI / 180);
 
@@ -51,10 +50,10 @@ export function OperatingExpensesPieChart() {
       <text
         x={x}
         y={y}
-        fill="white"
+        fill="dark"
         textAnchor="middle"
         dominantBaseline="central"
-        className="text-xs font-medium"
+        className="text-sm font-semibold"
       >
         {`${(percent * 100).toFixed(0)}%`}
       </text>
@@ -77,9 +76,9 @@ export function OperatingExpensesPieChart() {
                 nameKey="name"
                 cx="50%"
                 cy="50%"
-                outerRadius={80}
+                outerRadius={100}
                 fill="#8884d8"
-                labelLine={false}
+                labelLine={true}
                 label={renderCustomizedLabel}
               >
                 {chartData.map((entry, index) => (
@@ -90,21 +89,24 @@ export function OperatingExpensesPieChart() {
                 layout="vertical"
                 align="right"
                 verticalAlign="middle"
-                formatter={(value, entry, index) => (
-                  <span className="text-sm text-muted-foreground">{value}</span>
+                formatter={(value, entry: any) => (
+                  <span style={{ color: entry.color }}>{value}</span>
                 )}
               />
               <ChartTooltip
                 content={
                   <ChartTooltipContent
-                    formatter={(value, name, props) => (
-                      <div className="flex flex-col gap-1">
-                        <span className="font-medium">{formatTooltipValue(value as number)}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {((value as number / totalValue) * 100).toFixed(2)}%
-                        </span>
-                      </div>
-                    )}
+                    formatter={(value, name, props) => {
+                      const percentage = ((value as number / totalValue) * 100).toFixed(2);
+                      return (
+                        <div className="flex flex-col gap-1">
+                          <span className="font-medium" style={{ color: chartConfig[name as keyof typeof chartConfig].color }}>
+                            {chartConfig[name as keyof typeof chartConfig].label}
+                          </span>
+                          <span>{`${formatTooltipValue(value as number)} (${percentage}%)`}</span>
+                        </div>
+                      )
+                    }}
                   />
                 }
               />
