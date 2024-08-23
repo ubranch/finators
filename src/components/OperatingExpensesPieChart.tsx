@@ -4,6 +4,7 @@ import { Pie, PieChart, Cell, Legend, ResponsiveContainer } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { financialData } from "@/lib/data/financialData"
+import { formatAmount } from "@/lib/utils"
 
 const chartData = [
   { name: 'Other', value: Number(financialData.OperatingExpenses.Other.Amount) },
@@ -33,8 +34,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function OperatingExpensesPieChart() {
-  const formatTooltipValue = (value: number) => {
+export function OperatingExpensesPieChart({ amountFormat }: { amountFormat: string }) {  const formatTooltipValue = (value: number) => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'UZS' }).format(value)
   }
 
@@ -103,7 +103,7 @@ export function OperatingExpensesPieChart() {
                           <span className="font-medium" style={{ color: chartConfig[name as keyof typeof chartConfig].color }}>
                             {chartConfig[name as keyof typeof chartConfig].label}
                           </span>
-                          <span>{`${formatTooltipValue(value as number)} (${percentage}%)`}</span>
+                          <span>{`${formatAmount(value.toString(), amountFormat)} (${percentage}%)`}</span>
                         </div>
                       )
                     }}
