@@ -40,7 +40,10 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function RevenueBarChart({ amountFormat, data }: RevenueBarChartProps) {
+export function RevenueBarChart({
+  amountFormat,
+  data,
+}: Readonly<RevenueBarChartProps>) {
   const chartData = [
     {
       name: "Company",

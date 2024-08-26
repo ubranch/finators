@@ -60,7 +60,7 @@ export function FinancialDashboard() {
     <div className="space-y-4">
       <Card>
         <CardContent className="pt-6">
-          <div className="flex justify-end mb-4 space-x-4">
+          <div className="flex justify-end items-center mb-4 space-x-4">
             <AmountFormatSelector onFormatChange={handleFormatChange} />
             <ToggleViewButton
               isGraphicView={isGraphicView}
