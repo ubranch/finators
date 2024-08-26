@@ -18,7 +18,7 @@ export function formatAmount(
     return (
       (num / 1000).toLocaleString("en-US", {
         maximumFractionDigits: 2,
-      }) + "k"
+      }) + "K"
     );
   }
 
