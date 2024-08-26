@@ -1,4 +1,6 @@
-import { Pie, PieChart, Cell, Legend, ResponsiveContainer } from "recharts";
+"use client";
+
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
 import {
   Card,
   CardContent,
@@ -12,24 +14,14 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { financialData } from "@/lib/data/financialData";
 import { formatAmount } from "@/lib/utils";
+import { FinancialData } from "@/lib/data/financialData";
+import { useTheme } from "next-themes";
 
-const chartData = [
-  {
-    name: "Other",
-    value: Number(financialData.OperatingExpenses.Other.Amount),
-  },
-  {
-    name: "Payroll",
-    value: Number(financialData.OperatingExpenses.Payroll.Amount),
-  },
-  { name: "Tax", value: Number(financialData.OperatingExpenses.Tax.Amount) },
-  {
-    name: "Utility",
-    value: Number(financialData.OperatingExpenses.Utility.Amount),
-  },
-];
+interface OperatingExpensesPieChartProps {
+  amountFormat: string;
+  data: FinancialData;
+}
 
 const COLORS = [
   "hsl(var(--chart-1))",
@@ -59,15 +51,25 @@ const chartConfig = {
 
 export function OperatingExpensesPieChart({
   amountFormat,
-}: {
-  amountFormat: string;
-}) {
-  const formatTooltipValue = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "UZS",
-    }).format(value);
-  };
+  data,
+}: OperatingExpensesPieChartProps) {
+  const { theme } = useTheme();
+
+  const chartData = [
+    {
+      name: "Other",
+      value: Number(data.OperatingExpenses.Other.Amount),
+    },
+    {
+      name: "Payroll",
+      value: Number(data.OperatingExpenses.Payroll.Amount),
+    },
+    { name: "Tax", value: Number(data.OperatingExpenses.Tax.Amount) },
+    {
+      name: "Utility",
+      value: Number(data.OperatingExpenses.Utility.Amount),
+    },
+  ];
 
   const totalValue = chartData.reduce((sum, item) => sum + item.value, 0);
 
@@ -78,11 +80,13 @@ export function OperatingExpensesPieChart({
     const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180);
     const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180);
 
+    const textColor = theme === "dark" ? "white" : "black";
+
     return (
       <text
         x={x}
         y={y}
-        fill="dark"
+        fill={textColor}
         textAnchor="middle"
         dominantBaseline="central"
         className="text-sm font-semibold"

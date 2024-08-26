@@ -21,21 +21,13 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { financialData } from "@/lib/data/financialData";
 import { formatAmount } from "@/lib/utils";
+import { FinancialData } from "@/lib/data/financialData";
 
-const chartData = [
-  {
-    name: "Company",
-    Payment: Number(financialData.Revenue.Company.Payment),
-    Paid: Number(financialData.Revenue.Company.Paid),
-  },
-  {
-    name: "Individual",
-    Payment: Number(financialData.Revenue.Individual.Payment),
-    Paid: Number(financialData.Revenue.Individual.Paid),
-  },
-];
+interface RevenueBarChartProps {
+  amountFormat: string;
+  data: FinancialData;
+}
 
 const chartConfig = {
   Payment: {
@@ -48,22 +40,25 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function RevenueBarChart({
-  amountFormat,
-}: Readonly<{ amountFormat: string }>) {
+export function RevenueBarChart({ amountFormat, data }: RevenueBarChartProps) {
+  const chartData = [
+    {
+      name: "Company",
+      Payment: Number(data.Revenue.Company.Payment),
+      Paid: Number(data.Revenue.Company.Paid),
+    },
+    {
+      name: "Individual",
+      Payment: Number(data.Revenue.Individual.Payment),
+      Paid: Number(data.Revenue.Individual.Paid),
+    },
+  ];
+
   const formatYAxis = (tickItem: number) => {
     return new Intl.NumberFormat("en-US", {
       notation: "compact",
       compactDisplay: "short",
     }).format(tickItem);
-  };
-
-  // Will be needed in the future
-  const formatTooltipValue = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "UZS",
-    }).format(value);
   };
 
   return (
