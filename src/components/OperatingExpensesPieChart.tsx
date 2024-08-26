@@ -17,6 +17,7 @@ import {
 import { formatAmount } from "@/lib/utils";
 import { FinancialData } from "@/lib/data/financialData";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 interface OperatingExpensesPieChartProps {
   amountFormat: string;
@@ -52,8 +53,15 @@ const chartConfig = {
 export function OperatingExpensesPieChart({
   amountFormat,
   data,
-}: OperatingExpensesPieChartProps) {
-  const { theme } = useTheme();
+}: Readonly<OperatingExpensesPieChartProps>) {
+  const { resolvedTheme } = useTheme();
+  const [mountedTheme, setMountedTheme] = useState<string | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    setMountedTheme(resolvedTheme);
+  }, [resolvedTheme]);
 
   const chartData = [
     {
@@ -80,21 +88,24 @@ export function OperatingExpensesPieChart({
     const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180);
     const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180);
 
-    const textColor = theme === "dark" ? "white" : "black";
-
     return (
       <text
         x={x}
         y={y}
-        fill={textColor}
+        fill="currentColor"
         textAnchor="middle"
         dominantBaseline="central"
-        className="text-sm font-semibold"
+        className="text-sm font-semibold theme-transition"
       >
         {`${(percent * 100).toFixed(0)}%`}
       </text>
     );
   };
+
+  if (mountedTheme === undefined) {
+    // Return a placeholder or loading state
+    return <div>Loading...</div>;
+  }
 
   return (
     <Card>
@@ -128,9 +139,7 @@ export function OperatingExpensesPieChart({
                 layout="vertical"
                 align="right"
                 verticalAlign="middle"
-                formatter={(value, entry: any) => (
-                  <span style={{ color: entry.color }}>{value}</span>
-                )}
+                formatter={(value, entry: any) => <span>{value}</span>}
               />
               <ChartTooltip
                 content={
@@ -155,7 +164,9 @@ export function OperatingExpensesPieChart({
                                 .label
                             }
                           </span>
-                          <span>{`${formatAmount(value.toString(), amountFormat)} (${percentage}%)`}</span>
+                          <span>
+                            {`${formatAmount(value.toString(), amountFormat)} (${percentage}%)`}
+                          </span>
                         </div>
                       );
                     }}
