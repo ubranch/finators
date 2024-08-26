@@ -25,9 +25,9 @@ export class SankeyNode {
     sankey_plot_object: any,
     column: number,
     position: number,
-    color: string = 'blue',
-    label: string = '',
-    properties_object: any = {}
+    color: string = "blue",
+    label: string = "",
+    properties_object: any = {},
   ) {
     this.original_x = x;
     this.original_y = y;
@@ -50,20 +50,26 @@ export class SankeyNode {
   }
 
   private createDomElement(): void {
-    this.dom_group_node = document.createElementNS("http://www.w3.org/2000/svg", 'g');
-    this.dom_rectangle = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+    this.dom_group_node = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "g",
+    );
+    this.dom_rectangle = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "rect",
+    );
     this.sankey_plot_object.dom_node.appendChild(this.dom_group_node);
     this.dom_group_node.appendChild(this.dom_rectangle);
     this.dom_group_node.style.transform = `translate(${this.original_x}px, ${this.original_y}px)`;
     this.setAttributes(this.dom_rectangle, {
-      'width': `${this.width}px`,
-      'height': `${Math.max(0, this.height)}px`,
-      'fill': this.original_color,
-      'x': 0,
-      'y': 0,
-      'identifier': 'SankeyNode',
-      'column': this.column,
-      'position': this.position
+      width: `${this.width}px`,
+      height: `${Math.max(0, this.height)}px`,
+      fill: this.original_color,
+      x: 0,
+      y: 0,
+      identifier: "SankeyNode",
+      column: this.column,
+      position: this.position,
     });
   }
 
@@ -71,19 +77,33 @@ export class SankeyNode {
     const BORDER_PADDING = this.sankey_plot_object.BORDER_PADDING;
 
     if (this.sankey_plot_object.node_move_x) {
-      let new_x_pos = Math.max(BORDER_PADDING, Math.min(
-        new_x - this.width / 2 + this.sankey_plot_object.dom_node.parentNode.scrollLeft,
-        this.sankey_plot_object.plot_width - this.width - BORDER_PADDING
-      ));
-      this.sankey_plot_object.nodes_data_structure[this.column][this.position]['horizontal_shift'] += new_x_pos - this.current_x;
+      let new_x_pos = Math.max(
+        BORDER_PADDING,
+        Math.min(
+          new_x -
+            this.width / 2 +
+            this.sankey_plot_object.dom_node.parentNode.scrollLeft,
+          this.sankey_plot_object.plot_width - this.width - BORDER_PADDING,
+        ),
+      );
+      this.sankey_plot_object.nodes_data_structure[this.column][this.position][
+        "horizontal_shift"
+      ] += new_x_pos - this.current_x;
       this.current_x = new_x_pos;
     }
     if (this.sankey_plot_object.node_move_y) {
-      let new_y_pos = Math.max(BORDER_PADDING, Math.min(
-        new_y - this.height / 2 + this.sankey_plot_object.dom_node.parentNode.scrollTop,
-        this.sankey_plot_object.plot_height - this.height - BORDER_PADDING
-      ));
-      this.sankey_plot_object.nodes_data_structure[this.column][this.position]['vertical_shift'] += new_y_pos - this.current_y;
+      let new_y_pos = Math.max(
+        BORDER_PADDING,
+        Math.min(
+          new_y -
+            this.height / 2 +
+            this.sankey_plot_object.dom_node.parentNode.scrollTop,
+          this.sankey_plot_object.plot_height - this.height - BORDER_PADDING,
+        ),
+      );
+      this.sankey_plot_object.nodes_data_structure[this.column][this.position][
+        "vertical_shift"
+      ] += new_y_pos - this.current_y;
       this.current_y = new_y_pos;
     }
     this.dom_group_node.style.transform = `translate(${this.current_x}px, ${this.current_y}px)`;
@@ -102,7 +122,10 @@ export class SankeyNode {
     this.links.push(link);
   }
 
-  private setAttributes(element: Element, attributes: Record<string, string | number>): void {
+  private setAttributes(
+    element: Element,
+    attributes: Record<string, string | number>,
+  ): void {
     for (const [key, value] of Object.entries(attributes)) {
       element.setAttribute(key, value.toString());
     }

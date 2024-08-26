@@ -5,18 +5,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { financialData } from "@/lib/data/financialData"
-import { useState } from "react"
-import { formatAmount } from "@/lib/utils"
-import { ChevronDownIcon } from "@radix-ui/react-icons"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { financialData } from "@/lib/data/financialData";
+import { useState } from "react";
+import { formatAmount } from "@/lib/utils";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
 
-export function FinancialSummaryTable({ amountFormat }: { amountFormat: string }) {  const formatNumber = (num: string) =>
-    new Intl.NumberFormat("en-US").format(Number(num))
+export function FinancialSummaryTable({
+  amountFormat,
+}: {
+  amountFormat: string;
+}) {
+  const formatNumber = (num: string) =>
+    new Intl.NumberFormat("en-US").format(Number(num));
 
-  const [showOperatingExpenses, setShowOperatingExpenses] = useState(false)
+  const [showOperatingExpenses, setShowOperatingExpenses] = useState(false);
 
   return (
     <Card>
@@ -40,7 +45,10 @@ export function FinancialSummaryTable({ amountFormat }: { amountFormat: string }
               <TableCell rowSpan={3}>Revenue</TableCell>
               <TableCell>Company</TableCell>
               <TableCell className="text-right">
-                {formatAmount(financialData.Revenue.Company.Payment, amountFormat)}
+                {formatAmount(
+                  financialData.Revenue.Company.Payment,
+                  amountFormat,
+                )}
               </TableCell>
               <TableCell className="text-right">
                 {formatAmount(financialData.Revenue.Company.Paid, amountFormat)}
@@ -52,10 +60,16 @@ export function FinancialSummaryTable({ amountFormat }: { amountFormat: string }
             <TableRow>
               <TableCell>Individual</TableCell>
               <TableCell className="text-right">
-                {formatAmount(financialData.Revenue.Individual.Payment, amountFormat)}
+                {formatAmount(
+                  financialData.Revenue.Individual.Payment,
+                  amountFormat,
+                )}
               </TableCell>
               <TableCell className="text-right">
-                {formatAmount(financialData.Revenue.Individual.Paid, amountFormat)}
+                {formatAmount(
+                  financialData.Revenue.Individual.Paid,
+                  amountFormat,
+                )}
               </TableCell>
               <TableCell className="text-right">
                 {financialData.Revenue.Individual.Ratio}
@@ -64,7 +78,10 @@ export function FinancialSummaryTable({ amountFormat }: { amountFormat: string }
             <TableRow>
               <TableCell>Total</TableCell>
               <TableCell className="text-right">
-                {formatAmount(financialData.Revenue.Total.Payment, amountFormat)}
+                {formatAmount(
+                  financialData.Revenue.Total.Payment,
+                  amountFormat,
+                )}
               </TableCell>
               <TableCell className="text-right">
                 {formatAmount(financialData.Revenue.Total.Paid, amountFormat)}
@@ -81,7 +98,9 @@ export function FinancialSummaryTable({ amountFormat }: { amountFormat: string }
               <TableCell className="text-right">
                 {formatAmount(financialData.COGS.Amount, amountFormat)}
               </TableCell>
-              <TableCell className="text-right">{financialData.COGS.Ratio}</TableCell>
+              <TableCell className="text-right">
+                {financialData.COGS.Ratio}
+              </TableCell>
             </TableRow>
 
             {/* Gross Profit */}
@@ -93,35 +112,35 @@ export function FinancialSummaryTable({ amountFormat }: { amountFormat: string }
               <TableCell className="text-right">
                 {formatAmount(financialData.GrossProfit.Paid, amountFormat)}
               </TableCell>
-              <TableCell className="text-right">{financialData.GrossProfit.Ratio}</TableCell>
+              <TableCell className="text-right">
+                {financialData.GrossProfit.Ratio}
+              </TableCell>
             </TableRow>
-                        {/* Operating Expenses */}
+            {/* Operating Expenses */}
             <TableRow>
               <TableCell
                 colSpan={2}
                 className="cursor-pointer flex items-center justify-between"
-                onClick={() =>
-                  setShowOperatingExpenses(!showOperatingExpenses)
-                }
+                onClick={() => setShowOperatingExpenses(!showOperatingExpenses)}
               >
                 Operating Expenses
                 <ChevronDownIcon
                   className={cn(
                     "h-4 w-4 transition-transform duration-200",
-                    showOperatingExpenses ? "rotate-180" : ""
+                    showOperatingExpenses ? "rotate-180" : "",
                   )}
                 />
               </TableCell>
               <TableCell className="text-right">
                 {formatAmount(
                   financialData.OperatingExpenses.Total.Amount,
-                  amountFormat
+                  amountFormat,
                 )}
               </TableCell>
               <TableCell className="text-right">
                 {formatAmount(
                   financialData.OperatingExpenses.Total.Amount,
-                  amountFormat
+                  amountFormat,
                 )}
               </TableCell>
               <TableCell className="text-right">
@@ -141,9 +160,11 @@ export function FinancialSummaryTable({ amountFormat }: { amountFormat: string }
                       <TableCell className="text-right">
                         {formatAmount(value.Amount, amountFormat)}
                       </TableCell>
-                      <TableCell className="text-right">{value.Ratio}</TableCell>
+                      <TableCell className="text-right">
+                        {value.Ratio}
+                      </TableCell>
                     </TableRow>
-                  )
+                  ),
               )}
 
             {/* Net Profit */}
@@ -155,11 +176,13 @@ export function FinancialSummaryTable({ amountFormat }: { amountFormat: string }
               <TableCell className="text-right">
                 {formatAmount(financialData.NetProfit.Paid, amountFormat)}
               </TableCell>
-              <TableCell className="text-right">{financialData.NetProfit.Ratio}</TableCell>
+              <TableCell className="text-right">
+                {financialData.NetProfit.Ratio}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </CardContent>
     </Card>
-  )
+  );
 }

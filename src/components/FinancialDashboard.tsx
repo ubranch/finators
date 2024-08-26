@@ -1,23 +1,23 @@
-"use client"
-import { useState } from 'react'
-import { FinancialSummaryTable } from "./FinancialSummaryTable"
-import { SankeyChart } from "./SankeyChart"
-import { RevenueBarChart } from "./RevenueBarChart"
-import { OperatingExpensesPieChart } from "./OperatingExpensesPieChart"
-import { ToggleViewButton } from "./ToggleViewButton"
-import { AmountFormatSelector } from "./AmountFormatSelector"
+"use client";
+import { useState } from "react";
+import { FinancialSummaryTable } from "./FinancialSummaryTable";
+import { SankeyChart } from "./SankeyChart";
+import { RevenueBarChart } from "./RevenueBarChart";
+import { OperatingExpensesPieChart } from "./OperatingExpensesPieChart";
+import { ToggleViewButton } from "./ToggleViewButton";
+import { AmountFormatSelector } from "./AmountFormatSelector";
 
 export function FinancialDashboard() {
-  const [isGraphicView, setIsGraphicView] = useState(true)
-  const [amountFormat, setAmountFormat] = useState("default")
+  const [isGraphicView, setIsGraphicView] = useState(true);
+  const [amountFormat, setAmountFormat] = useState("default");
 
   const toggleView = () => {
-    setIsGraphicView(!isGraphicView)
-  }
+    setIsGraphicView(!isGraphicView);
+  };
 
   const handleFormatChange = (format: string) => {
-    setAmountFormat(format)
-  }
+    setAmountFormat(format);
+  };
 
   return (
     <div className="space-y-4">
@@ -27,7 +27,7 @@ export function FinancialDashboard() {
       </div>
       {isGraphicView ? (
         <>
-          <SankeyChart amountFormat={amountFormat}/>
+          <SankeyChart amountFormat={amountFormat} />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <RevenueBarChart amountFormat={amountFormat} />
             <OperatingExpensesPieChart amountFormat={amountFormat} />
@@ -37,5 +37,5 @@ export function FinancialDashboard() {
         <FinancialSummaryTable amountFormat={amountFormat} />
       )}
     </div>
-  )
+  );
 }

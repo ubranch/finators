@@ -17,7 +17,6 @@ export interface ColumnNamesStyle {
   color?: string;
   opacity?: string;
   'font-weight'?: string;
-  // Add any other CSS properties you might use
 }
 
 export interface Settings {
