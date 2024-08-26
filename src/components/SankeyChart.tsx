@@ -8,15 +8,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { PlotCreator } from "@/lib/SankeyChart/PlotCreator";
-import { financialData } from "@/lib/data/financialData";
 import { formatAmount } from "@/lib/utils";
 import { useEffect, useRef } from "react";
+import { FinancialData } from "@/lib/data/financialData";
 
 interface SankeyChartProps {
   readonly amountFormat: string;
+  readonly data: FinancialData;
 }
 
-export function SankeyChart({ amountFormat }: SankeyChartProps) {
+export function SankeyChart({ amountFormat, data }: SankeyChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const plotCreatorRef = useRef<PlotCreator | null>(null);
 
@@ -50,55 +51,55 @@ export function SankeyChart({ amountFormat }: SankeyChartProps) {
         {
           from: { column: 0, node: 0 },
           to: { column: 1, node: 0 },
-          value: Number(financialData.Revenue.Company.Payment),
+          value: Number(data.Revenue.Company.Payment),
           color: { start: "#4287f5", end: "#f542e6" },
         },
         {
           from: { column: 0, node: 1 },
           to: { column: 1, node: 0 },
-          value: Number(financialData.Revenue.Individual.Payment),
+          value: Number(data.Revenue.Individual.Payment),
           color: { start: "#41f48e", end: "#f542e6" },
         },
         {
           from: { column: 1, node: 0 },
           to: { column: 2, node: 0 },
-          value: Number(financialData.COGS.Amount),
+          value: Number(data.COGS.Amount),
           color: { start: "#f542e6", end: "#f54242" },
         },
         {
           from: { column: 1, node: 0 },
           to: { column: 2, node: 1 },
-          value: Number(financialData.GrossProfit.Payment),
+          value: Number(data.GrossProfit.Payment),
           color: { start: "#f542e6", end: "#42e8f5" },
         },
         {
           from: { column: 2, node: 1 },
           to: { column: 3, node: 0 },
-          value: Number(financialData.OperatingExpenses.Other.Amount),
+          value: Number(data.OperatingExpenses.Other.Amount),
           color: { start: "#42e8f5", end: "#f5a442" },
         },
         {
           from: { column: 2, node: 1 },
           to: { column: 3, node: 1 },
-          value: Number(financialData.OperatingExpenses.Payroll.Amount),
+          value: Number(data.OperatingExpenses.Payroll.Amount),
           color: { start: "#42e8f5", end: "#8e42f5" },
         },
         {
           from: { column: 2, node: 1 },
           to: { column: 3, node: 2 },
-          value: Number(financialData.OperatingExpenses.Tax.Amount),
+          value: Number(data.OperatingExpenses.Tax.Amount),
           color: { start: "#42e8f5", end: "#42f5b9" },
         },
         {
           from: { column: 2, node: 1 },
           to: { column: 3, node: 3 },
-          value: Number(financialData.OperatingExpenses.Utility.Amount),
+          value: Number(data.OperatingExpenses.Utility.Amount),
           color: { start: "#42e8f5", end: "#f542a1" },
         },
         {
           from: { column: 2, node: 1 },
           to: { column: 4, node: 0 },
-          value: Number(financialData.NetProfit.Payment),
+          value: Number(data.NetProfit.Payment),
           color: { start: "#42e8f5", end: "#42f56f" },
         },
       ];
@@ -143,7 +144,7 @@ export function SankeyChart({ amountFormat }: SankeyChartProps) {
         plotCreatorRef.current = null;
       }
     };
-  }, [amountFormat]);
+  }, [amountFormat, data]);
 
   return (
     <Card>
