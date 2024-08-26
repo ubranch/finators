@@ -1,23 +1,33 @@
-// src/components/RevenueBarChart.tsx
-"use client"
+"use client";
 
-import { Bar, BarChart, XAxis, YAxis, Legend, ResponsiveContainer } from "recharts"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { financialData } from "@/lib/data/financialData"
+import {
+  Bar,
+  BarChart,
+  Legend,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { formatAmount } from "@/lib/utils";
+import { FinancialData } from "@/lib/data/financialData";
 
-const chartData = [
-  {
-    name: 'Company',
-    Payment: Number(financialData.Revenue.Company.Payment),
-    Paid: Number(financialData.Revenue.Company.Paid),
-  },
-  {
-    name: 'Individual',
-    Payment: Number(financialData.Revenue.Individual.Payment),
-    Paid: Number(financialData.Revenue.Individual.Paid),
-  },
-]
+interface RevenueBarChartProps {
+  amountFormat: string;
+  data: FinancialData;
+}
 
 const chartConfig = {
   Payment: {
@@ -28,22 +38,36 @@ const chartConfig = {
     label: "Paid",
     color: "hsl(var(--chart-2))",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
-export function RevenueBarChart() {
+export function RevenueBarChart({ amountFormat, data }: RevenueBarChartProps) {
+  const chartData = [
+    {
+      name: "Company",
+      Payment: Number(data.Revenue.Company.Payment),
+      Paid: Number(data.Revenue.Company.Paid),
+    },
+    {
+      name: "Individual",
+      Payment: Number(data.Revenue.Individual.Payment),
+      Paid: Number(data.Revenue.Individual.Paid),
+    },
+  ];
+
   const formatYAxis = (tickItem: number) => {
-    return new Intl.NumberFormat('en-US', { notation: 'compact', compactDisplay: 'short' }).format(tickItem)
-  }
-
-  const formatTooltipValue = (value: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'UZS' }).format(value)
-  }
+    return new Intl.NumberFormat("en-US", {
+      notation: "compact",
+      compactDisplay: "short",
+    }).format(tickItem);
+  };
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Revenue</CardTitle>
-        <CardDescription>Company vs Individual revenue for June</CardDescription>
+        <CardDescription>
+          Company vs Individual revenue for June
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -57,21 +81,38 @@ export function RevenueBarChart() {
                   <ChartTooltipContent
                     formatter={(value, name) => (
                       <div className="flex items-center justify-between gap-2">
-                        <span className="font-medium" style={{ color: chartConfig[name as keyof typeof chartConfig].color }}>
+                        <span
+                          className="font-medium"
+                          style={{
+                            color:
+                              chartConfig[name as keyof typeof chartConfig]
+                                .color,
+                          }}
+                        >
                           {chartConfig[name as keyof typeof chartConfig].label}:
                         </span>
-                        <span>{formatTooltipValue(value as number)}</span>
+                        <span>
+                          {formatAmount(value.toString(), amountFormat)}
+                        </span>
                       </div>
                     )}
                   />
                 }
               />
-              <Bar dataKey="Payment" fill={chartConfig.Payment.color} radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Paid" fill={chartConfig.Paid.color} radius={[4, 4, 0, 0]} />
+              <Bar
+                dataKey="Payment"
+                fill={chartConfig.Payment.color}
+                radius={[4, 4, 0, 0]}
+              />
+              <Bar
+                dataKey="Paid"
+                fill={chartConfig.Paid.color}
+                radius={[4, 4, 0, 0]}
+              />
             </BarChart>
           </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }
