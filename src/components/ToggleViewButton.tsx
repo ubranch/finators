@@ -1,12 +1,11 @@
-// src/components/ToggleViewButton.tsx
-import React from "react"
-import { BarChart, Table } from "lucide-react"
+import { BarChart, Table } from "lucide-react";
+import React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 interface ToggleViewButtonProps {
-  isGraphicView: boolean
-  onToggle: () => void
+  readonly isGraphicView: boolean;
+  readonly onToggle: () => void;
 }
 
 export function ToggleViewButton({
@@ -26,5 +25,5 @@ export function ToggleViewButton({
       )}
       {isGraphicView ? "Graphic View" : "Table View"}
     </Button>
-  )
+  );
 }
