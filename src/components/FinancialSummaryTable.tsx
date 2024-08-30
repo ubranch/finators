@@ -118,6 +118,7 @@ export function FinancialSummaryTable({
                   )}
                 />
               </TableCell>
+              <TableCell></TableCell>
               <TableCell className="text-right">
                 {formatAmount(
                   data.OperatingExpenses.Total.Amount,
