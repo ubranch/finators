@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+import {useEffect, useState} from 'react';
+import {useRouter} from 'next/navigation';
+import {toast} from 'sonner';
 import {
     LoginForm,
     LoginFormData,
@@ -10,7 +10,7 @@ import {
     RegisterForm,
     RegisterFormData,
     registerSchema
-} from '@/components/AuthForms';
+} from '@/components/auth/AuthForms';
 import {Card, CardContent} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {login, register} from '@/app/actions';
