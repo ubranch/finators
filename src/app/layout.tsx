@@ -1,18 +1,13 @@
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Financial Dashboard",
-  description:
-    "A comprehensive financial dashboard displaying revenue, operating expenses, and other key financial metrics.",
-  keywords: ["finance", "dashboard", "revenue", "expenses", "analytics"],
-  authors: [{ name: "Ilya Ismailov" }],
-  creator: "Finators & Swift Team",
-  publisher: "Ilya Ismailov",
+  description: "A comprehensive financial dashboard with authentication",
 };
 
 export default function RootLayout({
@@ -30,6 +25,7 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           {children}
+          <Toaster richColors  position="top-center" />
         </ThemeProvider>
       </body>
     </html>
