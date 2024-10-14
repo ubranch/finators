@@ -1,7 +1,4 @@
-[![Quality gate](https://6hcqdh9imjzg.share.zrok.io/api/project_badges/quality_gate?project=ubranch_finators_0daa1103-baec-4864-879c-3a6a6eb5b072&token=sqb_017da62623ec343fefb699de14e8407494f49322)](https://6hcqdh9imjzg.share.zrok.io/dashboard?id=ubranch_finators_0daa1103-baec-4864-879c-3a6a6eb5b072)
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [
-`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
