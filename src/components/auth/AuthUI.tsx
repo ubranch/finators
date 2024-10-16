@@ -1,8 +1,8 @@
 'use client';
 
-import {useEffect, useState} from 'react';
-import {useRouter} from 'next/navigation';
-import {toast} from 'sonner';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { toast } from 'sonner';
 import {
     LoginForm,
     LoginFormData,
@@ -11,18 +11,19 @@ import {
     RegisterFormData,
     registerSchema
 } from '@/components/auth/AuthForms';
-import {Card, CardContent} from "@/components/ui/card";
-import {Button} from "@/components/ui/button";
-import {login, register} from '@/app/actions';
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { login, register } from '@/app/actions';
 
 export function AuthUI() {
     const [isLogin, setIsLogin] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const error = params.get('error');
-        const message = params.get('message');
+        const error = searchParams.get('error');
+        const message = searchParams.get('message');
 
         if (error === 'login_failed') {
             toast.error('Login failed. Please try again.');
@@ -46,22 +47,38 @@ export function AuthUI() {
         if (error || message) {
             router.replace('/');
         }
-    }, [router]);
+    }, [router, searchParams]);
 
     const handleLogin = async (data: LoginFormData) => {
+        setIsLoading(true);
         const formData = new FormData();
         formData.append('email', data.email);
         formData.append('password', data.password);
-        await login(formData);
+        try {
+            await login(formData);
+        } catch (error) {
+            console.error('Login error:', error);
+            toast.error('Login failed. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleRegister = async (data: RegisterFormData) => {
+        setIsLoading(true);
         const formData = new FormData();
         formData.append('email', data.email);
         formData.append('password', data.password);
         formData.append('passwordConfirm', data.passwordConfirm);
         formData.append('username', data.username);
-        await register(formData);
+        try {
+            await register(formData);
+        } catch (error) {
+            console.error('Registration error:', error);
+            toast.error('Registration failed. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -73,8 +90,8 @@ export function AuthUI() {
                             schema={loginSchema}
                             onSubmit={handleLogin}
                             renderAfter={() => (
-                                <Button type="submit" className="w-full mt-4">
-                                    Login
+                                <Button type="submit" className="w-full mt-4" disabled={isLoading}>
+                                    {isLoading ? 'Logging in...' : 'Login'}
                                 </Button>
                             )}
                         />
@@ -83,8 +100,8 @@ export function AuthUI() {
                             schema={registerSchema}
                             onSubmit={handleRegister}
                             renderAfter={() => (
-                                <Button type="submit" className="w-full mt-4">
-                                    Register
+                                <Button type="submit" className="w-full mt-4" disabled={isLoading}>
+                                    {isLoading ? 'Registering...' : 'Register'}
                                 </Button>
                             )}
                         />
@@ -98,6 +115,7 @@ export function AuthUI() {
                         setIsLogin(!isLogin);
                     }}
                     className="text-primary hover:underline"
+                    disabled={isLoading}
                 >
                     {isLogin ? 'Need an account? Register' : 'Already have an account? Login'}
                 </button>

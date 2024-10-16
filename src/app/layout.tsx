@@ -26,7 +26,13 @@ export default function RootLayout({
             disableTransitionOnChange={false}
         >
             {children}
-            <Toaster richColors position="top-center"/>
+            <Toaster
+                richColors
+                position="top-center"
+                toastOptions={{
+                    className: 'border-2',
+                }}
+            />
         </ThemeProvider>
         </body>
         </html>

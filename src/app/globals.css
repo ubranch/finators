@@ -42,38 +42,39 @@
     }
 
     .dark {
-        --background: 222 47% 13%;
+        --background: 222 47% 18%;
         --foreground: 210 40% 98%;
 
-        --card: 222 47% 11%;
+        --card: 222 47% 20%;
         --card-foreground: 210 40% 98%;
 
-        --popover: 222 47% 11%;
+        --popover: 222 47% 20%;
         --popover-foreground: 210 40% 98%;
 
         --primary: 217.2 91.2% 59.8%;
         --primary-foreground: 222 47% 11%;
 
-        --secondary: 217.2 32.6% 17.5%;
+        --secondary: 217.2 32.6% 25%;
         --secondary-foreground: 210 40% 98%;
 
-        --muted: 217.2 32.6% 17.5%;
-        --muted-foreground: 215 20.2% 65.1%;
+        --muted: 217.2 32.6% 25%;
+        --muted-foreground: 215 20.2% 75%;
 
-        --accent: 217.2 32.6% 17.5%;
+        --accent: 217.2 32.6% 25%;
         --accent-foreground: 210 40% 98%;
 
-        --destructive: 0 62.8% 30.6%;
+        --destructive: 0 62.8% 40.6%;
         --destructive-foreground: 210 40% 98%;
 
-        --border: 217.2 32.6% 17.5%;
-        --input: 217.2 32.6% 17.5%;
-        --ring: 224.3 76.3% 48%;
-        --chart-1: 220 70% 50%;
-        --chart-2: 160 60% 45%;
-        --chart-3: 30 80% 55%;
-        --chart-4: 280 65% 60%;
-        --chart-5: 340 75% 55%;
+        --border: 217.2 32.6% 25%;
+        --input: 217.2 32.6% 25%;
+        --ring: 224.3 76.3% 58%;
+
+        --chart-1: 220 70% 60%;
+        --chart-2: 160 60% 55%;
+        --chart-3: 30 80% 65%;
+        --chart-4: 280 65% 70%;
+        --chart-5: 340 75% 65%;
     }
 }
 
@@ -105,4 +106,28 @@ html {
 body {
     min-height: 100vh;
     overflow-y: auto;
+}
+
+/* Custom toast styles */
+[data-sonner-toaster] {
+    font-family: inherit;
+}
+
+[data-sonner-toaster] [data-sonner-toast] {
+    --normal-bg: hsl(var(--background));
+    --normal-border: hsl(var(--border));
+    --normal-text: hsl(var(--foreground));
+    --success-bg: hsl(var(--background));
+    --success-border: hsl(var(--primary));
+    --success-text: hsl(var(--primary));
+    --error-bg: hsl(var(--background));
+    --error-border: hsl(var(--destructive));
+    --error-text: hsl(var(--destructive));
+
+    font-family: inherit;
+    font-weight: 600;
+    background: var(--normal-bg);
+    border: 2px solid var(--normal-border);
+    color: var(--normal-text);
+    @apply shadow-md;
 }

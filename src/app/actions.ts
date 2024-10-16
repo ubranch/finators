@@ -27,7 +27,7 @@ export async function login(formData: FormData) {
     redirect('/dashboard');
   } catch (error) {
     console.error('Login failed:', error);
-    redirect('/?error=login_failed');
+    throw new Error('Login failed');
   }
 }
 
@@ -70,6 +70,6 @@ export async function register(formData: FormData) {
     redirect('/dashboard?message=registered');
   } catch (error) {
     console.error('Registration failed:', error);
-    redirect('/?error=registration_failed');
+    throw new Error('Registration failed');
   }
 }

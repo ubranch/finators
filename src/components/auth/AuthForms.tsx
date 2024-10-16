@@ -26,10 +26,10 @@ function TextField() {
       <label className="block text-sm font-medium text-foreground mb-1">{label}</label>
       <input
         type={label?.toLowerCase().includes('password') ? 'password' : 'text'}
-        value={field.value || ''}
+        value={field.value ?? ''}
         onChange={(e) => field.onChange(e.target.value)}
         className={`w-full p-2 border bg-background text-foreground rounded-sm ${
-          error ? 'border-destructive' : 'border-input'
+          error ? 'border-destructive border-2' : 'border-input'
         }`}
       />
       {error && <span className="text-destructive text-sm mt-1">{error.errorMessage}</span>}
