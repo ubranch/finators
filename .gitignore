@@ -44,3 +44,4 @@ pnpm-lock.yaml
 
 # AI related stuff
 /ai
+.idea
