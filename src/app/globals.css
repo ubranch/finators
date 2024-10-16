@@ -91,24 +91,20 @@
 }
 
 
-/* Hide scrollbar for Chrome, Safari and Opera */
 ::-webkit-scrollbar {
     display: none;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
 html {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
-/* Ensure the body takes up the full viewport height */
 body {
     min-height: 100vh;
     overflow-y: auto;
 }
 
-/* Custom toast styles */
 [data-sonner-toaster] {
     font-family: inherit;
 }
@@ -125,7 +121,7 @@ body {
     --error-text: hsl(var(--destructive));
 
     font-family: inherit;
-    font-weight: 600;
+    font-weight: 700;
     background: var(--normal-bg);
     border: 2px solid var(--normal-border);
     color: var(--normal-text);
