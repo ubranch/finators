@@ -18,6 +18,7 @@ import { login, register } from '@/app/actions';
 export function AuthUI() {
     const [isLogin, setIsLogin] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -94,6 +95,12 @@ export function AuthUI() {
                                     {isLoading ? 'Logging in...' : 'Login'}
                                 </Button>
                             )}
+                            props={{
+                                password: {
+                                    showPassword,
+                                    setShowPassword,
+                                },
+                            }}
                         />
                     ) : (
                         <RegisterForm
@@ -104,6 +111,16 @@ export function AuthUI() {
                                     {isLoading ? 'Registering...' : 'Register'}
                                 </Button>
                             )}
+                            props={{
+                                password: {
+                                    showPassword,
+                                    setShowPassword,
+                                },
+                                passwordConfirm: {
+                                    showPassword,
+                                    setShowPassword,
+                                },
+                            }}
                         />
                     )}
                 </CardContent>
@@ -113,6 +130,7 @@ export function AuthUI() {
                     onClick={(e) => {
                         e.preventDefault();
                         setIsLogin(!isLogin);
+                        setShowPassword(false); // Reset password visibility when switching forms
                     }}
                     className="text-primary hover:underline"
                     disabled={isLoading}
