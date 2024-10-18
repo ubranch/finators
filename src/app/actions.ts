@@ -1,6 +1,5 @@
 'use server';
 
-import { redirect } from 'next/navigation';
 import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
 
@@ -11,9 +10,7 @@ export async function login(formData: FormData) {
   const password = formData.get('password') as string;
 
   try {
-    const { token, record: model } = await pb
-      .collection('users')
-      .authWithPassword(email, password);
+    const { token, record: model } = await pb.collection('users').authWithPassword(email, password);
 
     const cookie = JSON.stringify({ token, model });
 
@@ -24,16 +21,27 @@ export async function login(formData: FormData) {
       httpOnly: true,
     });
 
-    redirect('/dashboard');
-  } catch (error) {
+    return { success: true };
+  } catch (error: any) {
     console.error('Login failed:', error);
-    throw new Error('Login failed');
+    let errorMessage = 'Login failed';
+
+    if (error.response?.data) {
+      const { identity, password } = error.response.data;
+      if (identity && identity.message) {
+        errorMessage = `Email: ${identity.message}`;
+      } else if (password && password.message) {
+        errorMessage = `Password: ${password.message}`;
+      }
+    }
+
+    return { success: false, error: errorMessage };
   }
 }
 
 export async function logout() {
   cookies().delete('pb_auth');
-  redirect('/?message=logged_out');
+  return { success: true, message: 'logged_out' };
 }
 
 export async function register(formData: FormData) {
@@ -42,21 +50,16 @@ export async function register(formData: FormData) {
   const passwordConfirm = formData.get('passwordConfirm') as string;
   const username = formData.get('username') as string;
 
-  if (password !== passwordConfirm) {
-    redirect('/?error=passwords_do_not_match');
-  }
-
   try {
     await pb.collection('users').create({
       email,
-      username,
       password,
       passwordConfirm,
+      username,
     });
 
-    const { token, record: model } = await pb
-      .collection('users')
-      .authWithPassword(email, password);
+    // After successful registration, log the user in
+    const { token, record: model } = await pb.collection('users').authWithPassword(email, password);
 
     const cookie = JSON.stringify({ token, model });
 
@@ -67,9 +70,20 @@ export async function register(formData: FormData) {
       httpOnly: true,
     });
 
-    redirect('/dashboard?message=registered');
-  } catch (error) {
+    return { success: true };
+  } catch (error: any) {
     console.error('Registration failed:', error);
-    throw new Error('Registration failed');
+    let errorMessage = 'Registration failed';
+
+    if (error.response?.data) {
+      const { email, username } = error.response.data;
+      if (email && email.message) {
+        errorMessage = `Email: ${email.message}`;
+      } else if (username && username.message) {
+        errorMessage = `Username: ${username.message}`;
+      }
+    }
+
+    return { success: false, error: errorMessage };
   }
 }

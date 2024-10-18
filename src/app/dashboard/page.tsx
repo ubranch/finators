@@ -1,23 +1,31 @@
 'use client';
 
-import {logout} from '../actions';
-import {FinancialDashboard} from "@/components/dashboard/FinancialDashboard";
-import {AuthCheck} from "@/components/auth/AuthCheck";
-import {Header} from "@/components/layout/header";
-import {Button} from "@/components/ui/button";
+import { useRouter } from 'next/navigation';
+import { logout } from '../actions';
+import { FinancialDashboard } from "@/components/dashboard/FinancialDashboard";
+import { AuthCheck } from "@/components/auth/AuthCheck";
+import { Header } from "@/components/layout/header";
+import { Button } from "@/components/ui/button";
+import { toast } from 'sonner';
 
 export default function DashboardPage() {
+    const router = useRouter();
+
+    const handleLogout = async () => {
+        const result = await logout();
+        if (result.success) {
+            toast.success('Logged out successfully');
+            router.push('/');
+        }
+    };
+
     return (
         <AuthCheck>
             <div className="min-h-screen bg-background text-foreground">
-                <Header/>
                 <main className="container mx-auto py-10">
-                    <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-                    <p className="mb-4">Welcome to your dashboard</p>
+                    <Header />
                     <FinancialDashboard/>
-                    <form action={logout} className="mt-8">
-                        <Button type="submit" variant="destructive">Logout</Button>
-                    </form>
+                    <Button onClick={handleLogout} className="mt-8" variant="destructive">Logout</Button>
                 </main>
             </div>
         </AuthCheck>

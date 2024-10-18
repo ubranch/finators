@@ -26,16 +26,12 @@ export function AuthUI() {
         const error = searchParams.get('error');
         const message = searchParams.get('message');
 
-        if (error === 'login_failed') {
+        if (error === 'auth_required') {
+            toast.error('Please log in to access the dashboard');
+        } else if (error === 'login_failed') {
             toast.error('Login failed. Please try again.');
         } else if (error === 'registration_failed') {
             toast.error('Registration failed. Please try again.');
-        } else if (error === 'passwords_do_not_match') {
-            toast.error('Passwords do not match. Please try again.');
-        } else if (error === 'auth_required') {
-            toast.error('Please log in to access the dashboard');
-        } else if (error === 'session_expired') {
-            toast.error('Your session has expired. Please log in again.');
         }
 
         if (message === 'logged_out') {
@@ -56,10 +52,18 @@ export function AuthUI() {
         formData.append('email', data.email);
         formData.append('password', data.password);
         try {
-            await login(formData);
+            const result = await login(formData);
+            if (result.success) {
+                toast.success('Logged in successfully');
+                setTimeout(() => {
+                    router.push('/dashboard');
+                }, 500); // Redirect after 500ms
+            } else {
+                toast.error(result.error);
+            }
         } catch (error) {
             console.error('Login error:', error);
-            toast.error('Login failed. Please try again.');
+            toast.error('An unexpected error occurred. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -73,10 +77,16 @@ export function AuthUI() {
         formData.append('passwordConfirm', data.passwordConfirm);
         formData.append('username', data.username);
         try {
-            await register(formData);
+            const result = await register(formData);
+            if (result.success) {
+                toast.success('Registered and logged in successfully');
+                router.push('/dashboard');
+            } else {
+                toast.error(result.error);
+            }
         } catch (error) {
             console.error('Registration error:', error);
-            toast.error('Registration failed. Please try again.');
+            toast.error('An unexpected error occurred. Please try again.');
         } finally {
             setIsLoading(false);
         }

@@ -83,7 +83,7 @@ function TextField({ showPassword, setShowPassword }: Readonly<{ showPassword?: 
   const togglePassword = () => setShowPassword?.(!showPassword);
 
   return (
-    <div className="mb-2 relative">
+    <div className="mb-4 relative">
       <label className="block text-sm font-medium text-foreground mb-1">{label}</label>
       <div className="relative">
         <InputField
